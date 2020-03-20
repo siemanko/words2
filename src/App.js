@@ -122,7 +122,7 @@ function SettingsModal() {
             <hr />
             <div className="form-group">
               <label htmlFor="risk" className="text-justify">
-                Langauge
+                Language
               </label>
               <select className="form-control" id="lang">
                 <option value="en">English</option>
