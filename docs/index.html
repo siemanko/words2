@@ -1,0 +1,228 @@
+<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/><link rel="stylesheet" href="index.css"><link href="/words2/static/css/main.48be3dab.chunk.css" rel="stylesheet"></head><body><div id="root"></div><script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script><script src="seeded_shuffle.js"></script><script src="words.js"></script><script>var game = {};
+            game.lang = 'en';
+            game.seed = 'en-changeme';
+            game.num_rows = 5;
+            game.num_cols = 5;
+            game.words = [];
+            game.revealed = [];
+            game.allrevealed = false;
+            game.type  = []
+            game.error = null;
+            game.enable_auto_clues = true;
+            game.risk = "0";
+            game.num_guesses = "3";
+            game.auto_clues = {
+                red: [],
+                blue: [],
+            }
+            game.auto_clues_blacklist = [];
+            game.human_cluemaster_hints = false;
+            game.use_common_words = false;
+            game.require_double_click = false;
+
+            function getRandomInt(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+            }
+
+            function get_remaining(game, c) {
+                var res = 0;
+                for (var idx = 0; idx < game.num_rows * game.num_cols; idx += 1) {
+                    if (!game.revealed[idx] && game.type[idx] == c) {
+                        res += 1;
+                    }
+                }
+                return res;
+            }            
+
+            function render() {
+                // settings
+                $('#risk').val(game.risk);
+                $('#lang').val(game.lang);
+                $('#seed').val(game.seed);
+                $('#num-guesses').val(game.num_guesses);
+                $('#human-cluemaster-hints').prop('checked', game.human_cluemaster_hints);
+                $('#use-common-words').prop('checked', game.use_common_words);
+                $('#double-click').prop('checked', game.require_double_click);
+
+                if (window.gameComponent) {
+                    window.gameComponent.updateStateFromLegacyRender(game);
+                }
+                if (game.error === null) {
+                    $('#red-left').text(get_remaining(game, "r"));
+                    $('#blue-left').text(get_remaining(game, "b"));
+                }
+                sessionStorage.setItem("game", JSON.stringify(game));
+            }
+
+            function enable_cluemaster() {
+                game.allrevealed = true;
+                game.enable_auto_clues = false;
+                render();
+            }
+
+            function enable_ai_cluemaster() {
+                game.enable_auto_clues = true;
+                game.allrevealed = false;
+                render();
+            }
+
+            function enable_guess() {
+                game.enable_auto_clues = false;
+                game.allrevealed = false;
+                render();
+            }
+
+            function set_from_seed() {
+                var seed = game.seed.split('-', 2);
+
+                game.error = null;
+                if (seed.length != 2) {
+                    game.error = "Seed must be of form LANG-PHRASE, where LANG is the language and PHRASE defines the board.";
+                    render(); return;
+                }
+                var lang = seed[0];
+                var seed = seed[1];
+                if (!word_lists[lang]) {
+                    game.error = "Language must be one of " + Object.keys(word_lists).sort().join(', ') + ".";
+                    render(); return;
+                }
+                game.lang = lang;
+                allwords = word_lists[lang];
+
+                total = game.num_rows * game.num_cols;
+                nthings = Math.floor(total / 3);
+                game.type = [];
+                reds_and_blues = []
+                for (var i = 0; i < nthings + 1; i += 1) {
+                    reds_and_blues.push("r");
+                    reds_and_blues.push("b");
+                }
+                var reds_and_blues = seeded_shuffle.shuffle(reds_and_blues, seed, true).slice(0, reds_and_blues.length - 1);
+                for (var color of reds_and_blues) {
+                    game.type.push(color);
+                }
+                console.log(reds_and_blues)
+
+                game.type.push("e");
+                for (var i = 0; i < total - (2 * nthings + 2); i += 1) {
+                    game.type.push("n");
+                }
+                game.type = seeded_shuffle.shuffle(game.type, seed, true);
+
+                game.revealed = [];
+                for (var idx = 0; idx < game.num_rows * game.num_cols; idx += 1) { game.revealed.push(0); }
+                game.words = seeded_shuffle.shuffle(allwords, seed, true).slice(0, total);
+                game.auto_clues.red = [];
+                game.auto_clues.blue = [];
+                game.auto_clues_blacklist = [];
+                render();
+            }
+
+            alphabet = "abcdefghijklmnopqrstuvwxyz"
+
+            function int_to_string(seed) {
+                var res = "";
+                while (seed > 0) {
+                    res += alphabet[seed % alphabet.length];
+                    seed = Math.floor(seed / alphabet.length);
+                }
+                return res;
+            }
+
+            function reset() {
+                seed = getRandomInt(0, 1e9);
+                seed_str = game.lang + "-" + int_to_string(seed);
+                game.seed = seed_str
+                set_from_seed();
+            }
+
+            function update_risk() {
+                game.risk = $('#risk').val();
+                render()
+            }
+
+            function update_lang() {
+                game.lang = $('#lang').val();
+                reset()
+            }
+
+            function update_num_guesses() {
+                game.num_guesses = $('#num-guesses').val();
+                render();
+            }
+
+            function update_human_cluemaster_hints() {
+                game.human_cluemaster_hints = $(event.target).prop('checked');
+                if (game.human_cluemaster_hints) {
+                    enable_cluemaster();
+                } else {
+                    render();
+                }
+            }
+
+            function update_use_common_words() {
+                game.use_common_words = $(event.target).prop('checked');
+                render();
+            }
+
+            function update_double_click() {
+                game.require_double_click = $(event.target).prop('checked');
+                render();
+            }
+
+            var current_version = 18;
+
+            function verify_storage() {
+                var stored_version = sessionStorage.getItem('storage_version')
+                if (stored_version < current_version) {
+                    indexedDB.deleteDatabase('d2');
+                    sessionStorage.clear();
+                    sessionStorage.setItem('storage_version', current_version);
+                    if (stored_version !== null) {
+                        alert('Website was updated to new version! Deleting your old settings.')
+                    }
+                }
+            }
+
+            function update_seed() {
+                game.seed = $("#seed").val();
+                set_from_seed();
+            }
+
+            $(document).ready(function() {
+                verify_storage();
+                if (!('ontouchstart' in document.documentElement)) {
+                     $('[data-toggle="tooltip"]').tooltip();
+                }
+                $("#cluemaster").click(enable_cluemaster);
+                $("#ai-cluemaster").click(enable_ai_cluemaster);
+                $("#guess").click(enable_guess);
+
+                $("#reset").click(reset);
+
+                $("#about, #guess, #ai-cluemaster, #cluemaster, #settings, #reset").click(function() { $('#menu').collapse('hide') });
+
+                $("#seed").keyup(update_seed);
+                $("#risk").change(update_risk);
+                $("#lang").change(update_lang);
+                $("#num-guesses").change(update_num_guesses);
+
+                $('#human-cluemaster-hints').click(update_human_cluemaster_hints);
+                $('#use-common-words').click(update_use_common_words);
+                $('#double-click').click(update_double_click);
+
+                if (sessionStorage.getItem("game")) {
+                    game = JSON.parse(sessionStorage.getItem("game"));
+                    for (const key in game.auto_clues) {
+                        game.auto_clues[key] = game.auto_clues[key].filter(word => word != null);
+                    }
+                    render();
+                } else {
+                    reset();
+                }
+                $(window).on('unload', function() {
+                    sessionStorage.setItem("game", JSON.stringify(game));
+                });
+            });</script><script>!function(e,a,t,n,g,c,o){e.GoogleAnalyticsObject=g,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),o=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",o.parentNode.insertBefore(c,o)}(window,document,"script",0,"ga"),ga("create","UA-102294427-1","auto"),ga("send","pageview")</script><script>!function(i){function e(e){for(var r,t,n=e[0],o=e[1],u=e[2],l=0,f=[];l<n.length;l++)t=n[l],Object.prototype.hasOwnProperty.call(p,t)&&p[t]&&f.push(p[t][0]),p[t]=0;for(r in o)Object.prototype.hasOwnProperty.call(o,r)&&(i[r]=o[r]);for(s&&s(e);f.length;)f.shift()();return c.push.apply(c,u||[]),a()}function a(){for(var e,r=0;r<c.length;r++){for(var t=c[r],n=!0,o=1;o<t.length;o++){var u=t[o];0!==p[u]&&(n=!1)}n&&(c.splice(r--,1),e=l(l.s=t[0]))}return e}var t={},p={1:0},c=[];function l(e){if(t[e])return t[e].exports;var r=t[e]={i:e,l:!1,exports:{}};return i[e].call(r.exports,r,r.exports,l),r.l=!0,r.exports}l.m=i,l.c=t,l.d=function(e,r,t){l.o(e,r)||Object.defineProperty(e,r,{enumerable:!0,get:t})},l.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},l.t=function(r,e){if(1&e&&(r=l(r)),8&e)return r;if(4&e&&"object"==typeof r&&r&&r.__esModule)return r;var t=Object.create(null);if(l.r(t),Object.defineProperty(t,"default",{enumerable:!0,value:r}),2&e&&"string"!=typeof r)for(var n in r)l.d(t,n,function(e){return r[e]}.bind(null,n));return t},l.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return l.d(r,"a",r),r},l.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},l.p="/words2/";var r=this.webpackJsonpwords=this.webpackJsonpwords||[],n=r.push.bind(r);r.push=e,r=r.slice();for(var o=0;o<r.length;o++)e(r[o]);var s=n;a()}([])</script><script src="/words2/static/js/2.906fb7db.chunk.js"></script><script src="/words2/static/js/main.ae3b6e8b.chunk.js"></script></body></html>
