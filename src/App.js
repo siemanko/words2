@@ -86,7 +86,7 @@ function AboutModal() {
         </div>
         <div className="modal-footer">
           <a className="btn btn-info" href="https://en.wikipedia.org/wiki/Codenames_(board_game)">Rules</a>
-          <a className="btn btn-info" href="https://github.com/siemanko/words/">Source</a>
+          <a className="btn btn-info" href="https://github.com/siemanko/words2/">Source</a>
         </div>
       </div>
     </div>
