@@ -207,8 +207,10 @@
             var current_version = 18;
 
             function verify_storage() {
-                var stored_version = sessionStorage.getItem('storage_version')
-                if (stored_version < current_version) {
+                var stored_version = sessionStorage.getItem('storage_version');
+                console.log("current version: " + stored_version + "lol: " + (stored_version === null));
+                if (stored_version === null || stored_version < current_version) {
+                    console.log("resetting storage")
                     indexedDB.deleteDatabase('d2');
                     sessionStorage.clear();
                     sessionStorage.setItem('storage_version', current_version);

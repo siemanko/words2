@@ -3,6 +3,8 @@ import { Board, BoardNotifications } from './Board.js';
 import { RecommendBox, RecommendBoxNotifications } from './RecommendBox.js';
 import './App.css';
 import natural from 'natural';
+import Dialog from 'react-bootstrap-dialog';
+
 const Immutable = require('immutable');
 
 function App() {
@@ -46,7 +48,7 @@ class GamePanel extends React.Component {
     if (game === null) {
       return <div />;
     } else if (game.error !== null) {
-      return <p class="lead"> {game.error}</p>;
+      return <p className="lead"> {game.error}</p>;
     } else {
       return (
         <div>
@@ -94,114 +96,147 @@ function AboutModal() {
   );
 }
 
-function SettingsModal() {
-  return (<div className="modal fade" id="settings-modal" tabIndex="-1" role="dialog" aria-labelledby="settings-modal-label" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title" id="about-modal-label">Settings</h5>
-          <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+class SettingsModal extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+      var self = this;
+      function reset_settings() {
+
+          self.dialog.show({
+              body: (<div className="text-center delete-clue-confirm">
+                        <span>Are you want to reset settings to default? This cannot be undone.</span>
+                    </div>),
+              actions: [
+                  Dialog.CancelAction(),
+                  Dialog.OKAction(function() {
+                      sessionStorage.removeItem('storage_version');
+                      window.location.reload();
+                  })
+              ],
+              bsSize: 'small',
+          });
+      }
+
+      return (<div className="modal fade" id="settings-modal" tabIndex="-1" role="dialog" aria-labelledby="settings-modal-label" aria-hidden="true">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="about-modal-label">Settings</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div className="modal-body">
+              <form>
+                <div className="form-group">
+                  <label className="text-justify">
+                    Double click to reveal a word<br />
+                    <small>Do you sometimes accidentally reveal a word because of your clumsy laptop touchpad? This option might be for you!.</small>
+                  </label>
+                  <div className="form-check">
+                    <input className="form-check-input" type="checkbox" value="" id="double-click" />
+                    <label className="form-check-label" htmlFor="double-click">
+                      require double click / tap to reveal a word
+                    </label>
+                  </div>
+                </div>
+                <hr />
+                <div className="form-group">
+                  <label htmlFor="risk" className="text-justify">
+                    Language
+                  </label>
+                  <select className="form-control" id="lang">
+                    <option value="en">English</option>
+                    <option value="pl">Polish</option>
+                  </select>
+                </div>
+                <hr />
+
+                <div className="form-group">
+                  <label className="text-justify">
+                    Display AI hints<br />
+                    <small>In <tt>Give clues</tt> view we will display a list of suggested clues for the player to chose from. It is still up to them whether to use the suggestion or not.</small>
+                  </label>
+                  <div className="form-check">
+                    <input className="form-check-input" type="checkbox" value="" id="human-cluemaster-hints" />
+                    <label className="form-check-label" htmlFor="human-cluemaster-hints">
+                      help me come up with clues
+                    </label>
+                  </div>
+                </div>
+                <hr />
+                <div className="form-group">
+                  <label className="text-justify">
+                    Use only popular words<br />
+                    <small>The model can produce clues based on pretty large dictionary of words - about 30k - this allows it to sometimes find an original and awesome hint
+                      for a board where human might think that all hope is lost. However, this comes at a price - the clues can sometimes be unusual, offensive, hard to understrand or even google!
+                      If this is too much for you consider the option below. </small>
+                  </label>
+                  <div className="form-check">
+                    <input className="form-check-input" type="checkbox" value="" id="use-common-words" />
+                    <label className="form-check-label" htmlFor="use-common-words">
+                      Keep it simple
+                    </label>
+                  </div>
+                </div>
+                <hr />
+
+                <div className="form-group">
+                  <label htmlFor="risk" className="text-justify">
+                    Risk tolerance<br />
+                    <small>The number of bad words that are ignored when coming up with clues. Zeros words is the safest option, but might sometimes result in more awkward clues.</small>
+                  </label>
+                  <select className="form-control" id="risk">
+                    <option value="0">zero words</option>
+                    <option value="1">one word</option>
+                    <option value="2">two words</option>
+                    <option value="3">three words</option>
+                    <option value="allbutblack">all words (no black)</option>
+                    <option value="all">all words (including black)</option>
+                  </select>
+                </div>
+                <hr />
+
+                <div className="form-group">
+                  <label className="text-justify">
+                    AI Model Statistics<br />
+                    <small>Displays information about the automatic clue suggestion model, e.g. which words is the clue related to or what is its score.</small>
+                  </label>
+                  <div className="form-check">
+                    <input className="form-check-input" type="checkbox" value="" id="debug-enable" disabled />
+                    <label className="form-check-label" htmlFor="debug-enable">
+                      I want to know everything! <i>(coming soon!)</i>
+                    </label>
+                  </div>
+                </div>
+                <hr />
+                <div className="form-group">
+                  <label className="text-justify">
+                    Reset all settings<br />
+                    <small>Reset all settings to their default. Useful when something breaks.</small>
+                  </label>
+                  <input type="button" className="btn btn-secondary btn-small w-100" id="reset-settings" value="Reset" onClick={reset_settings} data-dismiss="modal"></input>
+                  <Dialog ref={(component) => { this.dialog = component;}} />
+                </div>
+              </form>
+
+            </div>
+
+          </div>
         </div>
-
-        <div className="modal-body">
-          <form>
-            <div className="form-group">
-              <label className="text-justify">
-                Double click to reveal a word<br />
-                <small>Do you sometimes accidentally reveal a word because of your clumsy laptop touchpad? This option might be for you!.</small>
-              </label>
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="double-click" />
-                <label className="form-check-label" htmlFor="double-click">
-                  require double click / tap to reveal a word
-                </label>
-              </div>
-            </div>
-            <hr />
-            <div className="form-group">
-              <label htmlFor="risk" className="text-justify">
-                Language
-              </label>
-              <select className="form-control" id="lang">
-                <option value="en">English</option>
-                <option value="pl">Polish</option>
-              </select>
-            </div>
-            <hr />
-
-            <div className="form-group">
-              <label className="text-justify">
-                Display AI hints<br />
-                <small>In <tt>Give clues</tt> view we will display a list of suggested clues for the player to chose from. It is still up to them whether to use the suggestion or not.</small>
-              </label>
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="human-cluemaster-hints" />
-                <label className="form-check-label" htmlFor="human-cluemaster-hints">
-                  help me come up with clues
-                </label>
-              </div>
-            </div>
-            <hr />
-            <div className="form-group">
-              <label className="text-justify">
-                Use only popular words<br />
-                <small>The model can produce clues based on pretty large dictionary of words - about 30k - this allows it to sometimes find an original and awesome hint
-                  for a board where human might think that all hope is lost. However, this comes at a price - the clues can sometimes be unusual, offensive, hard to understrand or even google!
-                  If this is too much for you consider the option below. </small>
-              </label>
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="use-common-words" />
-                <label className="form-check-label" htmlFor="use-common-words">
-                  Keep it simple
-                </label>
-              </div>
-            </div>
-            <hr />
-
-            <div className="form-group">
-              <label htmlFor="risk" className="text-justify">
-                Risk tolerance<br />
-                <small>The number of bad words that are ignored when coming up with clues. Zeros words is the safest option, but might sometimes result in more awkward clues.</small>
-              </label>
-              <select className="form-control" id="risk">
-                <option value="0">zero words</option>
-                <option value="1">one word</option>
-                <option value="2">two words</option>
-                <option value="3">three words</option>
-                <option value="allbutblack">all words (no black)</option>
-                <option value="all">all words (including black)</option>
-              </select>
-            </div>
-            <hr />
-
-            <div className="form-group">
-              <label className="text-justify">
-                AI Model Statistics<br />
-                <small>Displays information about the automatic clue suggestion model, e.g. which words is the clue related to or what is its score.</small>
-              </label>
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="debug-enable" disabled />
-                <label className="form-check-label" htmlFor="debug-enable">
-                  I want to know everything! <i>(coming soon!)</i>
-                </label>
-              </div>
-            </div>
-          </form>
-        </div>
-
       </div>
-    </div>
-  </div>
-  );
+      );
+    }
 }
 
 class NavBar extends React.Component {
   render() {
     return (
       <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light" id="main-navbar">
-        <span className="navbar-brand">Words <span class="badge badge-pill badge-warning">beta</span></span>
+        <span className="navbar-brand">Words <span className="badge badge-pill badge-warning">beta</span></span>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
