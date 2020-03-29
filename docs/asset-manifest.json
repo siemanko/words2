@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/words2/static/css/main.48be3dab.chunk.css",
-    "main.js": "/words2/static/js/main.e93aa8b8.chunk.js",
-    "main.js.map": "/words2/static/js/main.e93aa8b8.chunk.js.map",
+    "main.js": "/words2/static/js/main.89e12df2.chunk.js",
+    "main.js.map": "/words2/static/js/main.89e12df2.chunk.js.map",
     "runtime-main.js": "/words2/static/js/runtime-main.9091a3c6.js",
     "runtime-main.js.map": "/words2/static/js/runtime-main.9091a3c6.js.map",
     "static/js/2.920739b7.chunk.js": "/words2/static/js/2.920739b7.chunk.js",
     "static/js/2.920739b7.chunk.js.map": "/words2/static/js/2.920739b7.chunk.js.map",
     "index.html": "/words2/index.html",
-    "precache-manifest.cf5b23f852a1d360abe479598bd69016.js": "/words2/precache-manifest.cf5b23f852a1d360abe479598bd69016.js",
+    "precache-manifest.4f209774220db8edfd2d0ca94dbe970e.js": "/words2/precache-manifest.4f209774220db8edfd2d0ca94dbe970e.js",
     "service-worker.js": "/words2/service-worker.js",
     "static/css/main.48be3dab.chunk.css.map": "/words2/static/css/main.48be3dab.chunk.css.map",
     "static/js/2.920739b7.chunk.js.LICENSE": "/words2/static/js/2.920739b7.chunk.js.LICENSE"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.9091a3c6.js",
     "static/js/2.920739b7.chunk.js",
     "static/css/main.48be3dab.chunk.css",
-    "static/js/main.e93aa8b8.chunk.js"
+    "static/js/main.89e12df2.chunk.js"
   ]
 }
