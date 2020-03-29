@@ -265,7 +265,7 @@ class NavBar extends React.Component {
             </li>
             {/* about */}
             <li className="nav-item"><a href='https://www.patreon.com/words2' id="patreon" className="nav-link">
-              <img src="icons/money.svg" style={{ height: "2rem" }} />&nbsp;Support me
+              <img src="icons/money.svg" style={{ height: "2rem" }} />&nbsp;Donate
             </a></li>
 
 
