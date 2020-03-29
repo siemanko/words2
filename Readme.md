@@ -4,13 +4,15 @@ Browser version of boardgames [codenames](https://en.wikipedia.org/wiki/Codename
 
 Hosted at: https://siemanko.github.io/words2/
 
-Early version with bugs
+Uses glove vectors to suggest hints. I also used glove vectors to come up with a decent set of words.
+
 
 # For Contributors
 
 ### Adding new languages
 
-Read the code
+https://docs.google.com/spreadsheets/d/10YwdD6Gr_OIlFQOFQsQE6xhlMts2kF4nfHbJ-PQcpCY/edit?usp=sharing
+
 
 ### Shoutouts!
 

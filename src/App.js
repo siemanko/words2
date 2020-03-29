@@ -154,20 +154,6 @@ class SettingsModal extends React.Component {
                   </select>
                 </div>
                 <hr />
-
-                <div className="form-group">
-                  <label className="text-justify">
-                    Display AI hints<br />
-                    <small>In <tt>Give clues</tt> view we will display a list of suggested clues for the player to chose from. It is still up to them whether to use the suggestion or not.</small>
-                  </label>
-                  <div className="form-check">
-                    <input className="form-check-input" type="checkbox" value="" id="human-cluemaster-hints" />
-                    <label className="form-check-label" htmlFor="human-cluemaster-hints">
-                      help me come up with clues
-                    </label>
-                  </div>
-                </div>
-                <hr />
                 <div className="form-group">
                   <label className="text-justify">
                     Use only popular words<br />
@@ -236,7 +222,7 @@ class NavBar extends React.Component {
   render() {
     return (
       <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light" id="main-navbar">
-        <span className="navbar-brand">Words <span className="badge badge-pill badge-warning">beta</span></span>
+        <span className="navbar-brand">Words 2.0</span>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -250,15 +236,20 @@ class NavBar extends React.Component {
                 <img src="icons/detective.svg" style={{ height: '2rem' }} />&nbsp;Game Mode
             </a>
               <div className="dropdown-menu">
+                <h6 class="dropdown-header">Classic</h6>
                 <a className={(!this.props.enable_auto_clues && !this.props.all_revealed) ? "dropdown-item active" : "dropdown-item"} href="#" id="guess">
                   <img src="icons/guess.svg" style={{ height: '2rem' }} />&nbsp;Guess
-              </a>
-                <a className={this.props.all_revealed ? "dropdown-item active" : "dropdown-item"} href="#" id="cluemaster">
+                </a>
+                <a className={(!this.props.enable_auto_clues && this.props.all_revealed) ? "dropdown-item active" : "dropdown-item"} href="#" id="cluemaster">
                   <img src="icons/detective.svg" style={{ height: '2rem' }} />&nbsp;Give&nbsp;Clues
-              </a>
-                <a className={this.props.enable_auto_clues ? "dropdown-item active" : "dropdown-item"} href="#" id="ai-cluemaster">
-                  <img src="icons/ai.svg" style={{ height: '2rem' }} />&nbsp;AI&nbsp;Clues
-              </a>
+                </a>
+                <h6 class="dropdown-header">New (beta)</h6>
+                <a className={(this.props.enable_auto_clues && !this.props.all_revealed) ? "dropdown-item active" : "dropdown-item"} href="#" id="auto-cluemaster">
+                  <img src="icons/ai2.svg" style={{ height: '2rem' }} />&nbsp;Auto&nbsp;Clues
+                </a>
+                <a className={(this.props.enable_auto_clues && this.props.all_revealed) ? "dropdown-item active" : "dropdown-item"} href="#" id="assist-cluemaster">
+                  <img src="icons/ai.svg" style={{ height: '2rem' }} />&nbsp;Assisted&nbsp;Clues
+                </a>
               </div>
             </li>
 
