@@ -263,6 +263,12 @@ class NavBar extends React.Component {
               <img src="icons/info.svg" style={{ height: "2rem" }} />&nbsp;About
             </a>
             </li>
+            {/* about */}
+            <li className="nav-item"><a href='https://www.patreon.com/words2' id="patreon" className="nav-link">
+              <img src="icons/money.svg" style={{ height: "2rem" }} />&nbsp;Support me
+            </a></li>
+
+
             {/* reset  */}
             <li className="nav-item"><a href='#' id="reset" className="nav-link">
               <img src="icons/reset.svg" style={{ height: "2rem" }} />&nbsp;Reset
