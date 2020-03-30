@@ -135,3 +135,7 @@ body {
 .delete-clue-confirm {
     line-height: 1.7rem;
 }
+
+.navbar-icon {
+    height: 1rem;
+}

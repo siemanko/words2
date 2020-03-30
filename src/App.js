@@ -222,79 +222,75 @@ class NavBar extends React.Component {
   render() {
     return (
       <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light" id="main-navbar">
-        <span className="navbar-brand">Words 2.0</span>
+        <a className="navbar-brand" href="http://clues.fun/">
+          clues.fun
+          &nbsp;
+          <small id="red-left" style={{ color: 'red' }}></small>
+          &nbsp;
+          <small id="blue-left" style={{ color: 'blue' }}></small>
+          &nbsp;
+          &nbsp;
+          &nbsp;
+
+        </a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="menu">
           {/* navigation buttons */}
           <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-
             {/* game modes  */}
             <li className="nav-item dropdown">
               <a className="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="icons/detective.svg" style={{ height: '2rem' }} />&nbsp;Game Mode
+                <img src="icons/detective.svg" className="navbar-icon" />&nbsp;Game Mode
             </a>
               <div className="dropdown-menu">
                 <h6 class="dropdown-header">Classic</h6>
                 <a className={(!this.props.enable_auto_clues && !this.props.all_revealed) ? "dropdown-item active" : "dropdown-item"} href="#" id="guess">
-                  <img src="icons/guess.svg" style={{ height: '2rem' }} />&nbsp;Guess
+                  <img src="icons/guess.svg" className="navbar-icon" />&nbsp;Guess
                 </a>
                 <a className={(!this.props.enable_auto_clues && this.props.all_revealed) ? "dropdown-item active" : "dropdown-item"} href="#" id="cluemaster">
-                  <img src="icons/detective.svg" style={{ height: '2rem' }} />&nbsp;Give&nbsp;Clues
+                  <img src="icons/detective.svg" className="navbar-icon" />&nbsp;Give&nbsp;Clues
                 </a>
                 <h6 class="dropdown-header">New (beta)</h6>
                 <a className={(this.props.enable_auto_clues && !this.props.all_revealed) ? "dropdown-item active" : "dropdown-item"} href="#" id="auto-cluemaster">
-                  <img src="icons/ai2.svg" style={{ height: '2rem' }} />&nbsp;Auto&nbsp;Clues
+                  <img src="icons/ai2.svg" className="navbar-icon" />&nbsp;Auto&nbsp;Clues
                 </a>
                 <a className={(this.props.enable_auto_clues && this.props.all_revealed) ? "dropdown-item active" : "dropdown-item"} href="#" id="assist-cluemaster">
-                  <img src="icons/ai.svg" style={{ height: '2rem' }} />&nbsp;Assisted&nbsp;Clues
+                  <img src="icons/ai.svg" className="navbar-icon" />&nbsp;Assisted&nbsp;Clues
                 </a>
               </div>
             </li>
 
-            {/* settings */}
-            <li className="nav-item"><a href='#' id="about" className="nav-link" data-toggle="modal" data-target="#settings-modal">
-              <img src="icons/settings.svg" style={{ height: "2rem" }} />&nbsp;Settings
-            </a>
-            </li>
-            {/* about */}
-            <li className="nav-item"><a href='#' id="about" className="nav-link" data-toggle="modal" data-target="#about-modal">
-              <img src="icons/info.svg" style={{ height: "2rem" }} />&nbsp;About
-            </a>
-            </li>
-            {/* about */}
-            <li className="nav-item"><a href='https://www.patreon.com/words2' id="patreon" className="nav-link">
-              <img src="icons/money.svg" style={{ height: "2rem" }} />&nbsp;Donate
-            </a></li>
-
-
             {/* reset  */}
             <li className="nav-item"><a href='#' id="reset" className="nav-link">
-              <img src="icons/reset.svg" style={{ height: "2rem" }} />&nbsp;Reset
+              <img src="icons/reset.svg" className="navbar-icon" />&nbsp;Reset
             </a>
             </li>
+
+
+            {/* settings */}
+            <li className="nav-item"><a href='#' id="about" className="nav-link" data-toggle="modal" data-target="#settings-modal">
+              <img src="icons/settings.svg" className="navbar-icon" />&nbsp;Settings
+            </a>
+            </li>
+
+            {/* donate */}
+            <li className="nav-item"><a href='https://www.patreon.com/words2' id="patreon" className="nav-link">
+              <img src="icons/money.svg" className="navbar-icon" />&nbsp;Donate
+            </a></li>
+
+            {/* about */}
+            <li className="nav-item"><a href='#' id="about" className="nav-link" data-toggle="modal" data-target="#about-modal">
+              <img src="icons/info.svg" className="navbar-icon" />&nbsp;About
+            </a>
+            </li>
+
+
+
+
           </ul>
-          <div className="nav-text">
-            <span
-              style={{ color: 'red' }}
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Number of red tiles that weren't discovered yet.">
-              Red:&nbsp;<span id="red-left"></span>
-            </span>
-            &nbsp;&nbsp;
-            <span
-              style={{ color: 'blue' }}
-              data-toggle="tooltip"
-              data-placement="bottom"
-              align="right"
-              title="Number of blue tiles that weren't discovered yet.">
-              Blue:&nbsp;<span id="blue-left"></span>
-            </span>
-            &nbsp;
-            &nbsp;
-        </div>
+
           {/* seed input */}
           <form className="form-inline my-2 my-lg-0">
             <div className="input-group">
