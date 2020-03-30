@@ -82,9 +82,13 @@ function AboutModal() {
         <div className="modal-body">
           <p>Simple website to keep track of codenames-like game.</p>
 
-          <p>The twist here is that you don't need a person to chose hints - the computer will chose them for you. </p>
+          <p>To see all words select <b>Give Clues</b> from <b>Game Mode</b>.</p>
 
-          <p>In this mode even two people can play the game.</p>
+          <p>Type the same <b>seed</b> on a different device to get the same words.</p>
+
+          <p>The clues can be suggested by the computer automatically. Just select <b>Auto Clues</b> from <b>Game Mode</b>. In this mode you can play the game with just two people!</p>
+
+          <p>If you don't want the computer to completely take over, you can just look at its suggestions and pick the clue yourself. Just select <b>Assisted Clues</b> from <b>Game Mode</b>.</p>
         </div>
         <div className="modal-footer">
           <a className="btn btn-info" href="https://en.wikipedia.org/wiki/Codenames_(board_game)">Rules</a>
@@ -151,6 +155,7 @@ class SettingsModal extends React.Component {
                   <select className="form-control" id="lang">
                     <option value="en">English</option>
                     <option value="pl">Polish</option>
+                    <option value="he">Hebrew (by Yonatan Zax)</option>
                   </select>
                 </div>
                 <hr />
