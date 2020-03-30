@@ -155,7 +155,7 @@ class SettingsModal extends React.Component {
                   <select className="form-control" id="lang">
                     <option value="en">English</option>
                     <option value="pl">Polish</option>
-                    <option value="he">Hebrew (by Yonatan Zax)</option>
+                    <option value="he">Hebrew (anonymous contributor)</option>
                   </select>
                 </div>
                 <hr />
