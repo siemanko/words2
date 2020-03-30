@@ -2,7 +2,7 @@
 
 Browser version of boardgames [codenames](https://en.wikipedia.org/wiki/Codenames_(board_game)).
 
-Hosted at: https://clues.fun
+Hosted at: http://clues.fun
 
 Uses glove vectors to suggest hints. I also used glove vectors to come up with a decent set of words.
 
