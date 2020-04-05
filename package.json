@@ -15,7 +15,7 @@
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.0"
   },
-  "homepage": "http://siemanko.github.io/words2",
+  "homepage": "http://medaman.github.io/codenames",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
